@@ -9,7 +9,7 @@ import (
 	"myshop/cmd/user/config"
 	"myshop/internal/user/app/router"
 	"myshop/internal/user/infras/repo"
-	productsUC "myshop/internal/user/usecases/users"
+	userUC "myshop/internal/user/usecases/users"
 )
 
 func InitApp(
@@ -18,8 +18,8 @@ func InitApp(
 ) (*App, error) {
 	panic(wire.Build(
 		New,
-		router.ProductGRPCServerSet,
+		router.UserGRPCServerSet,
 		repo.RepositorySet,
-		productsUC.UseCaseSet,
+		userUC.UseCaseSet,
 	))
 }

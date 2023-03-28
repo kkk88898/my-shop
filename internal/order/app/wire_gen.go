@@ -7,19 +7,19 @@
 package app
 
 import (
-	"myshop/cmd/user/config"
-	"myshop/internal/user/app/router"
-	"myshop/internal/user/infras/repo"
-	"myshop/internal/user/usecases/users"
 	"google.golang.org/grpc"
+	"myshop/cmd/order/config"
+	"myshop/internal/order/app/router"
+	"myshop/internal/order/infras/repo"
+	"myshop/internal/order/usecases/order"
 )
 
 // Injectors from wire.go:
 
 func InitApp(cfg *config.Config, grpcServer *grpc.Server) (*App, error) {
-	userRepo := repo.NewOrderRepo()
-	useCase := users.NewService(userRepo)
-	userServiceServer := router.NewUserGRPCServer(grpcServer, useCase)
-	app := New(cfg, useCase, userServiceServer)
+	orderRepo := repo.NewOrderRepo()
+	useCase := order.NewService(orderRepo)
+	orderServiceServer := router.NewOrderGRPCServer(grpcServer, useCase)
+	app := New(cfg, useCase, orderServiceServer)
 	return app, nil
 }

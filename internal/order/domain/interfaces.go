@@ -5,8 +5,8 @@ import (
 )
 
 type (
-	UserRepo interface {
-		GetAll(context.Context) ([]*ItemTypeDto, error)
-		GetByTypes(context.Context, []string) ([]*ItemDto, error)
+	OrderRepo interface {
+		DelOrderById(c context.Context, orerId string) (*OrderDto, error)
+		GetOrderById(c context.Context, orerId string) (*OrderDto, error)
 	}
 )

@@ -6,10 +6,10 @@ package app
 import (
 	"github.com/google/wire"
 	"google.golang.org/grpc"
-	"myshop/cmd/user/config"
-	"myshop/internal/user/app/router"
-	"myshop/internal/user/infras/repo"
-	productsUC "myshop/internal/user/usecases/users"
+	"myshop/cmd/order/config"
+	"myshop/internal/order/app/router"
+	"myshop/internal/order/infras/repo"
+	orderUC "myshop/internal/order/usecases/order"
 )
 
 func InitApp(
@@ -18,8 +18,8 @@ func InitApp(
 ) (*App, error) {
 	panic(wire.Build(
 		New,
-		router.ProductGRPCServerSet,
+		router.OrderGRPCServerSet,
 		repo.RepositorySet,
-		productsUC.UseCaseSet,
+		orderUC.UseCaseSet,
 	))
 }

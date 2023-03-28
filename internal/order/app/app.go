@@ -1,27 +1,27 @@
 package app
 
 import (
-	"myshop/cmd/user/config"
+	"myshop/cmd/order/config"
 
-	productUC "myshop/internal/user/usecases/users"
+	orderUC "myshop/internal/order/usecases/order"
 
-	gen "myshop/proto/gen/user"
+	gen "myshop/proto/gen/order"
 )
 
 type App struct {
-	Cfg            *config.Config
-	UC             productUC.UseCase
-	UserGRPCServer gen.UserServer
+	Cfg             *config.Config
+	UC              orderUC.UseCase
+	OrderGRPCServer gen.OrderServiceServer
 }
 
 func New(
 	cfg *config.Config,
-	uc productUC.UseCase,
-	userGRPCServer gen.UserServer,
+	uc orderUC.UseCase,
+	orderGRPCServer gen.OrderServiceServer,
 ) *App {
 	return &App{
-		Cfg:            cfg,
-		UC:             uc,
-		UserGRPCServer: userGRPCServer,
+		Cfg:             cfg,
+		UC:              uc,
+		OrderGRPCServer: orderGRPCServer,
 	}
 }
