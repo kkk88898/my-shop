@@ -1,0 +1,22 @@
+version: v1
+name: buf.build/simba/my-shop
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+lint:
+  use:
+    - DEFAULT
+  ignore_only:
+    PACKAGE_DIRECTORY_MATCH:
+      - user_service.proto
+      - order_service.proto
+    PACKAGE_VERSION_SUFFIX:
+      - user_service.proto
+      - order_service.proto
+    RPC_REQUEST_RESPONSE_UNIQUE:
+      - user_service.proto
+      - order_service.proto
+    RPC_RESPONSE_STANDARD_NAME:
+      - user_service.proto
+      - order_service.proto
+     
