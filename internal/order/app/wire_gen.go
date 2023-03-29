@@ -12,14 +12,31 @@ import (
 	"myshop/internal/order/app/router"
 	"myshop/internal/order/infras/repo"
 	"myshop/internal/order/usecases/order"
+	"myshop/pkg/postgres"
 )
 
 // Injectors from wire.go:
 
-func InitApp(cfg *config.Config, grpcServer *grpc.Server) (*App, error) {
+func InitApp(cfg *config.Config, dbConnStr postgres.DBConnString, grpcServer *grpc.Server) (*App, func(), error) {
 	orderRepo := repo.NewOrderRepo()
 	useCase := order.NewService(orderRepo)
+	dbEngine, cleanup, err := dbEngineFunc(dbConnStr)
+	if err != nil {
+		return nil, nil, err
+	}
 	orderServiceServer := router.NewOrderGRPCServer(grpcServer, useCase)
-	app := New(cfg, useCase, orderServiceServer)
-	return app, nil
+	app := New(cfg, useCase, dbEngine, orderServiceServer)
+	return app, func() {
+		cleanup()
+	}, nil
+}
+
+// wire.go:
+
+func dbEngineFunc(url postgres.DBConnString) (postgres.DBEngine, func(), error) {
+	db, err := postgres.NewPostgresDB(url)
+	if err != nil {
+		return nil, nil, err
+	}
+	return db, func() { db.Close() }, nil
 }

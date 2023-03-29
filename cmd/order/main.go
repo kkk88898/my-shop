@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"myshop/pkg/postgres"
 	"net"
 	"os"
 	"os/signal"
@@ -50,7 +51,7 @@ func main() {
 		<-ctx.Done()
 	}()
 
-	_, err = app.InitApp(cfg, server)
+	_, cleanup, err := app.InitApp(cfg, postgres.DBConnString(cfg.PG.DsnURL), server)
 	if err != nil {
 		slog.Error("failed init app", err)
 		cancel()
@@ -85,8 +86,10 @@ func main() {
 
 	select {
 	case v := <-quit:
+		cleanup()
 		slog.Info("signal.Notify", v)
 	case done := <-ctx.Done():
+		cleanup()
 		slog.Info("ctx.Done", done)
 	}
 }
