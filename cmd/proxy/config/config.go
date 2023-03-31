@@ -19,10 +19,10 @@ type (
 	}
 
 	GRPC struct {
-		UserHost    string `env-required:"true" yaml:"user_host" env:"GRPC_USER_HOST"`
-		UserPort    int    `env-required:"true" yaml:"user_port" env:"GRPC_USER_PORT"`
-		CounterHost string `env-required:"true" yaml:"counter_host" env:"GRPC_COUNTER_HOST"`
-		CounterPort int    `env-required:"true" yaml:"counter_port" env:"GRPC_COUNTER_PORT"`
+		UserHost  string `env-required:"true" yaml:"user_host" env:"GRPC_USER_HOST"`
+		UserPort  int    `env-required:"true" yaml:"user_port" env:"GRPC_USER_PORT"`
+		OrderHost string `env-required:"true" yaml:"order_host" env:"GRPC_ORDER_HOST"`
+		OrderPort int    `env-required:"true" yaml:"order_port" env:"GRPC_ORDER_PORT"`
 	}
 )
 

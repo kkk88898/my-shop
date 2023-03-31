@@ -13,7 +13,8 @@ import (
 	"myshop/utils"
 
 	"myshop/pkg/logger"
-	gen "myshop/proto/gen/user"
+	"myshop/proto/gen/order"
+	"myshop/proto/gen/user"
 
 	"github.com/golang/glog"
 	gwruntime "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -31,19 +32,19 @@ func newGateway(
 	opts []gwruntime.ServeMuxOption,
 ) (http.Handler, error) {
 	userEndpoint := fmt.Sprintf("%s:%d", cfg.UserHost, cfg.UserPort)
-	// counterEndpoint := fmt.Sprintf("%s:%d", cfg.CounterHost, cfg.CounterPort)
+	orderEndPoint := fmt.Sprintf("%s:%d", cfg.OrderHost, cfg.OrderPort)
 
 	mux := gwruntime.NewServeMux(opts...)
 	dialOpts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err := gen.RegisterUserHandlerFromEndpoint(ctx, mux, userEndpoint, dialOpts)
+	err := user.RegisterUserHandlerFromEndpoint(ctx, mux, userEndpoint, dialOpts)
 	if err != nil {
 		return nil, err
 	}
 
-	// err = gen.RegisterCounterServiceHandlerFromEndpoint(ctx, mux, counterEndpoint, dialOpts)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err = order.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, orderEndPoint, dialOpts)
+	if err != nil {
+		return nil, err
+	}
 
 	return mux, nil
 }
