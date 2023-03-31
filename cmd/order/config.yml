@@ -10,6 +10,10 @@ postgres:
   pool_max: 2
   dsn_url: host=47.109.29.98 port=5432 user=postgres password=rc123321 dbname=postgres sslmode=disable
 
+mysql8:
+  pool_max: 2
+  dsn_url: root:123456@tcp(127.0.0.1:3306)/mytest?charset=utf8mb4&parseTime=True
+
 logger:
   log_level: 'debug'
   rollbar_env: 'order-service'

@@ -16,10 +16,16 @@ type (
 		configs.HTTP `yaml:"http"`
 		configs.Log  `yaml:"logger"`
 		PG           `yaml:"postgres"`
+		MYSQL8       `yaml:"mysql8"`
 	}
 	PG struct {
 		PoolMax int    `env-required:"true" yaml:"pool_max" env:"PG_POOL_MAX"`
 		DsnURL  string `env-required:"true" yaml:"dsn_url" env:"PG_DSN_URL"`
+	}
+
+	MYSQL8 struct {
+		PoolMax int    `env-required:"true" yaml:"pool_max" env:"MYSQL8_POOL_MAX"`
+		DsnURL  string `env-required:"true" yaml:"dsn_url" env:"MYSQL8_DSN_URL"`
 	}
 )
 

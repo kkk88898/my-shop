@@ -10,24 +10,35 @@ import (
 	"myshop/internal/order/app/router"
 	"myshop/internal/order/infras/repo"
 	orderUC "myshop/internal/order/usecases/order"
+	"myshop/pkg/mysql8"
 	"myshop/pkg/postgres"
 )
 
 func InitApp(
 	cfg *config.Config,
-	dbConnStr postgres.DBConnString,
+	dbPGConnStr postgres.DBConnString,
+	dbMysql8ConnStr mysql8.DBConnString,
 	grpcServer *grpc.Server,
 ) (*App, func(), error) {
 	panic(wire.Build(
 		New,
-		dbEngineFunc,
+		dbPGEngineFunc,
+		dbMysql8EngineFunc,
 		router.OrderGRPCServerSet,
 		repo.RepositorySet,
 		orderUC.UseCaseSet,
 	))
 }
-func dbEngineFunc(url postgres.DBConnString) (postgres.DBEngine, func(), error) {
+func dbPGEngineFunc(url postgres.DBConnString) (postgres.DBEngine, func(), error) {
 	db, err := postgres.NewPostgresDB(url)
+	if err != nil {
+		return nil, nil, err
+	}
+	return db, func() { db.Close() }, nil
+}
+
+func dbMysql8EngineFunc(url mysql8.DBConnString) (mysql8.DBEngine, func(), error) {
+	db, err := mysql8.NewMysql8DB(url)
 	if err != nil {
 		return nil, nil, err
 	}

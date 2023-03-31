@@ -12,29 +12,44 @@ import (
 	"myshop/internal/order/app/router"
 	"myshop/internal/order/infras/repo"
 	"myshop/internal/order/usecases/order"
+	"myshop/pkg/mysql8"
 	"myshop/pkg/postgres"
 )
 
 // Injectors from wire.go:
 
-func InitApp(cfg *config.Config, dbConnStr postgres.DBConnString, grpcServer *grpc.Server) (*App, func(), error) {
+func InitApp(cfg *config.Config, dbPGConnStr postgres.DBConnString, dbMysql8ConnStr mysql8.DBConnString, grpcServer *grpc.Server) (*App, func(), error) {
 	orderRepo := repo.NewOrderRepo()
 	useCase := order.NewService(orderRepo)
-	dbEngine, cleanup, err := dbEngineFunc(dbConnStr)
+	dbEngine, cleanup, err := dbPGEngineFunc(dbPGConnStr)
 	if err != nil {
 		return nil, nil, err
 	}
+	mysql8DBEngine, cleanup2, err := dbMysql8EngineFunc(dbMysql8ConnStr)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	orderServiceServer := router.NewOrderGRPCServer(grpcServer, useCase)
-	app := New(cfg, useCase, dbEngine, orderServiceServer)
+	app := New(cfg, useCase, dbEngine, mysql8DBEngine, orderServiceServer)
 	return app, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }
 
 // wire.go:
 
-func dbEngineFunc(url postgres.DBConnString) (postgres.DBEngine, func(), error) {
+func dbPGEngineFunc(url postgres.DBConnString) (postgres.DBEngine, func(), error) {
 	db, err := postgres.NewPostgresDB(url)
+	if err != nil {
+		return nil, nil, err
+	}
+	return db, func() { db.Close() }, nil
+}
+
+func dbMysql8EngineFunc(url mysql8.DBConnString) (mysql8.DBEngine, func(), error) {
+	db, err := mysql8.NewMysql8DB(url)
 	if err != nil {
 		return nil, nil, err
 	}
