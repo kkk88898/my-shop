@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"myshop/pkg/mysql8"
 	"net"
 	"os"
 	"os/signal"
@@ -33,7 +32,6 @@ func main() {
 	if err != nil {
 		slog.Error("failed get config", err)
 	}
-
 	slog.Info("⚡ init app", "name", cfg.Name, "version", cfg.Version)
 
 	// set up logrus
@@ -51,7 +49,7 @@ func main() {
 		<-ctx.Done()
 	}()
 
-	_, cleanup, err := app.InitApp(cfg, mysql8.DBConnString(cfg.MYSQL8.DsnURL), server)
+	_, cleanup, err := app.InitApp(cfg, server)
 	if err != nil {
 		slog.Error("failed init app", err)
 		cancel()

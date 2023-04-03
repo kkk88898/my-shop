@@ -17,8 +17,8 @@ import (
 
 // Injectors from wire.go:
 
-func InitApp(cfg *config.Config, dbMysql8ConnStr mysql8.DBConnString, grpcServer *grpc.Server) (*App, func(), error) {
-	dbEngine, cleanup, err := dbMysql8EngineFunc(dbMysql8ConnStr)
+func InitApp(cfg *config.Config, grpcServer *grpc.Server) (*App, func(), error) {
+	dbEngine, cleanup, err := dbMysql8EngineFunc(cfg)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -33,8 +33,8 @@ func InitApp(cfg *config.Config, dbMysql8ConnStr mysql8.DBConnString, grpcServer
 
 // wire.go:
 
-func dbMysql8EngineFunc(url mysql8.DBConnString) (mysql8.DBEngine, func(), error) {
-	db, err := mysql8.NewMysql8DB(url)
+func dbMysql8EngineFunc(cfg *config.Config) (mysql8.DBEngine, func(), error) {
+	db, err := mysql8.NewMysql8DB(cfg)
 	if err != nil {
 		return nil, nil, err
 	}

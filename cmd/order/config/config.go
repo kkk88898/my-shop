@@ -15,17 +15,14 @@ type (
 		configs.App  `yaml:"app"`
 		configs.HTTP `yaml:"http"`
 		configs.Log  `yaml:"logger"`
-		PG           `yaml:"postgres"`
 		MYSQL8       `yaml:"mysql8"`
-	}
-	PG struct {
-		PoolMax int    `env-required:"true" yaml:"pool_max" env:"PG_POOL_MAX"`
-		DsnURL  string `env-required:"true" yaml:"dsn_url" env:"PG_DSN_URL"`
 	}
 
 	MYSQL8 struct {
-		PoolMax int    `env-required:"true" yaml:"pool_max" env:"MYSQL8_POOL_MAX"`
-		DsnURL  string `env-required:"true" yaml:"dsn_url" env:"MYSQL8_DSN_URL"`
+		PoolMax     int    `env-required:"true" yaml:"pool_max" env:"MYSQL8_POOL_MAX"`
+		IdleConnMax int    `env-required:"true" yaml:"idle_conn_max" env:"MYSQL8_IDLE_CONN_MAX"`
+		MaxIdleTime int    `env-required:"true" yaml:"max_idle_time" env:"MYSQL8_MAX_IDLE_TIME"`
+		DsnURL      string `env-required:"true" yaml:"dsn_url" env:"MYSQL8_DSN_URL"`
 	}
 )
 
