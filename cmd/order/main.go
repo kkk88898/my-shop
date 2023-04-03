@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"myshop/pkg/mysql8"
-	"myshop/pkg/postgres"
 	"net"
 	"os"
 	"os/signal"
@@ -52,7 +51,7 @@ func main() {
 		<-ctx.Done()
 	}()
 
-	_, cleanup, err := app.InitApp(cfg, postgres.DBConnString(cfg.PG.DsnURL), mysql8.DBConnString(cfg.MYSQL8.DsnURL), server)
+	_, cleanup, err := app.InitApp(cfg, mysql8.DBConnString(cfg.MYSQL8.DsnURL), server)
 	if err != nil {
 		slog.Error("failed init app", err)
 		cancel()

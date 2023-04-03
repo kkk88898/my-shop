@@ -2,6 +2,7 @@ package mysql8
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/exp/slog"
 	"log"
 	"time"
@@ -32,8 +33,9 @@ func NewMysql8DB(url DBConnString) (DBEngine, error) {
 
 	var err error
 	for mysql8.connAttempts > 0 {
-		mysql8.db, err = sql.Open("mysql8", string(url))
+		mysql8.db, err = sql.Open("mysql", string(url))
 		if err != nil {
+
 			break
 		}
 
