@@ -1,0 +1,9 @@
+version: "1"
+packages:
+  - name: "gen"  #生成的包名，需提前创建
+    path: "./gen" #生成的文件目录
+    queries: "./query" #查询SQL文件
+    schema: "./schema" #建表SQL文件
+    engine: "mysql" #数据库指定为msql
+    emit_json_tags: true #为生成的模型对象结构添加JSON标签，默认false
+    emit_interface: true       #生成一个所有query的接口文档
