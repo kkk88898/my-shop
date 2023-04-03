@@ -37,12 +37,13 @@ func NewMysql8DB(url DBConnString) (DBEngine, error) {
 			break
 		}
 
-		log.Printf("Postgres is trying to connect, attempts left: %d", mysql8.connAttempts)
+		log.Printf("Mysql8 is trying to connect, attempts left: %d", mysql8.connAttempts)
 
 		time.Sleep(mysql8.connTimeout)
 
 		mysql8.connAttempts--
 	}
+
 	slog.Info("📰 connected to mysql8 🎉")
 
 	return mysql8, nil

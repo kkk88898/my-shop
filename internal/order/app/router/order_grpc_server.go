@@ -2,6 +2,7 @@ package router
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	order "myshop/internal/order/usecases/order"
 
 	gen "myshop/proto/gen/order"
@@ -41,8 +42,19 @@ func (g *orderGRPCServer) GetOrderById(
 	request *gen.GetOrderByIdRequest,
 ) (*gen.GetOrderByIdResponse, error) {
 	slog.Info("gRPC client", "http_method", "GET", "http_name", "GetUser")
-
-	if request.OrderId == "1" {
+	id, err := g.uc.GetOrderById(ctx, request.GetOrderId())
+	if err != nil {
+		return nil, errors.Wrap(err, "server.GetOrderById")
+	}
+	return &gen.GetOrderByIdResponse{
+		Order: &gen.OrderDto{
+			OrderId:    "1",
+			Price:      10,
+			Type:       id.Type,
+			Image:      "http://ftp.simbalink.cn/123.png",
+			CreateTime: "2023-03-11 12:21:21",
+		}}, nil
+	/*if request.OrderId == "1" {
 		return &gen.GetOrderByIdResponse{
 			Order: &gen.OrderDto{
 				OrderId:    "1",
@@ -53,7 +65,7 @@ func (g *orderGRPCServer) GetOrderById(
 			}}, nil
 	} else {
 		return &gen.GetOrderByIdResponse{}, nil
-	}
+	}*/
 }
 
 func (g *orderGRPCServer) DelOrderById(

@@ -19,19 +19,19 @@ import (
 // Injectors from wire.go:
 
 func InitApp(cfg *config.Config, dbPGConnStr postgres.DBConnString, dbMysql8ConnStr mysql8.DBConnString, grpcServer *grpc.Server) (*App, func(), error) {
-	orderRepo := repo.NewOrderRepo()
-	useCase := order.NewService(orderRepo)
-	dbEngine, cleanup, err := dbPGEngineFunc(dbPGConnStr)
+	dbEngine, cleanup, err := dbMysql8EngineFunc(dbMysql8ConnStr)
 	if err != nil {
 		return nil, nil, err
 	}
-	mysql8DBEngine, cleanup2, err := dbMysql8EngineFunc(dbMysql8ConnStr)
+	orderRepo := repo.NewOrderRepo(dbEngine)
+	useCase := order.NewService(orderRepo)
+	postgresDBEngine, cleanup2, err := dbPGEngineFunc(dbPGConnStr)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
 	orderServiceServer := router.NewOrderGRPCServer(grpcServer, useCase)
-	app := New(cfg, useCase, dbEngine, mysql8DBEngine, orderServiceServer)
+	app := New(cfg, useCase, postgresDBEngine, dbEngine, orderServiceServer)
 	return app, func() {
 		cleanup2()
 		cleanup()
