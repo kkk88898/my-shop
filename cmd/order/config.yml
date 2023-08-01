@@ -6,7 +6,6 @@ http:
   host: '0.0.0.0'
   port: 5002
 
-
 mysql8:
   pool_max: 100
   idle_conn_max: 50
