@@ -12,6 +12,7 @@ mysql8:
   max_idle_time: 86400
   dsn_url: root:123456@tcp(127.0.0.1:3306)/ddd_go?charset=utf8mb4&parseTime=True
 
+
 logger:
   log_level: 'debug'
   rollbar_env: 'order-service'
