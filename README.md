@@ -2,4 +2,6 @@
 go ddd shop
 mimimiaaaaaaai
 sssssssssss
-saaaaazzzzzzzzsssssaswwwwwwwwwwwwwwwwwwwwwwwwwwd
+saaaaazzzzz0zz
+zsssssaswwwwww
+wwwwwwwwwwwwwwwwwwwwd
